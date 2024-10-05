@@ -8,7 +8,7 @@ pygame.init()
 difficulty = 10  #How many movement ticks happen each second min = 1; max = 60
 tile_size = 40  #Size of tiles in pixels, should be a divisor of 640
 growth = 2      #ammount of extra segments at start
-border_mode = 1 #0 - looping; 1 - game over
+border_mode = 1 #1 - looping; 2 - game over
 random.seed(999)
 
 #check difficulty within bounds
@@ -42,6 +42,8 @@ currmove = DIR_DOWN
 
 ###
 def game_over():
+    global score
+    score *= border_mode
     print("Final score: ", score)
     pygame.quit()
     sys.exit()
@@ -72,7 +74,7 @@ def check_collision():
     for i in range(1, len(segments)):
         if (segments[i].x == snake_head.x) and (segments[i].y == snake_head.y):
             game_over()
-    if border_mode == 1:
+    if border_mode == 2:
         if snake_head.x < 0:
             game_over()
         elif snake_head.x >= 640:
@@ -99,7 +101,7 @@ def move_head():
     move_segments()
     snake_head.move_ip(nextmove[0], nextmove[1])
     #OOB CHECKS
-    if border_mode == 0:
+    if border_mode == 1:
         if snake_head.x < 0:
             snake_head.move_ip(640, 0)
         elif snake_head.x >= 640:
